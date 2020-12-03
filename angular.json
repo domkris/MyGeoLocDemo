@@ -120,5 +120,8 @@
       }
     }
   },
-  "defaultProject": "MyGeoLocDemo"
+  "defaultProject": "MyGeoLocDemo",
+  "cli": {
+    "analytics": false
+  }
 }
