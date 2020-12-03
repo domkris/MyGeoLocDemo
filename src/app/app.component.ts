@@ -13,6 +13,7 @@ export class AppComponent implements OnInit{
   title = 'MyGeoLocDemo';
   map;
   infoWindow: google.maps.InfoWindow;
+  searchPlace;
   handleLocationError(
     browserHasGeolocation: boolean,
     pos: google.maps.LatLng
@@ -24,6 +25,13 @@ export class AppComponent implements OnInit{
         : "Error: Your browser doesn't support geolocation."
     );
     this.infoWindow.open(this.map);
+  }
+  findPlaces(){
+
+  }
+  onKey($event){
+    this.searchPlace = $event.target.value;
+    console.log(this.searchPlace);
   }
   addMarker(coords){
     var marker = new google.maps.Marker({

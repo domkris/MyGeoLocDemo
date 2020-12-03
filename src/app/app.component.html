@@ -1,2 +1,4 @@
 <div id="map"></div>
+<input type="text" placeholder="Upiši mjesto..." (keyup)="onKey($event)">
+<button (click)="findPlaces()">Pretraga</button>
 <router-outlet></router-outlet>
