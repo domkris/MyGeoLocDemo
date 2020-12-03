@@ -12,10 +12,49 @@ export class AppComponent implements OnInit{
   }
   title = 'MyGeoLocDemo';
   map;
+  infoWindow: google.maps.InfoWindow;
+  handleLocationError(
+    browserHasGeolocation: boolean,
+    pos: google.maps.LatLng
+  ) {
+    this.infoWindow.setPosition(pos);
+    this.infoWindow.setContent(
+      browserHasGeolocation
+        ? "Error: The Geolocation service failed."
+        : "Error: Your browser doesn't support geolocation."
+    );
+    this.infoWindow.open(this.map);
+  }
+  addMarker(coords){
+    var marker = new google.maps.Marker({
+      position: coords,
+      map: this.map,
+      draggable: true,
+      animation: google.maps.Animation.DROP
+    })
+  }
+
   initMap(): void {
-    this.map = new google.maps.Map(document.getElementById("map"), {
-      center: { lat: 42.397, lng: -70 },
-      zoom: 8,
-    });
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position: Position) => {
+          const pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          this.map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: position.coords.latitude, lng: position.coords.longitude },
+            zoom: 12,
+          });
+          this.addMarker(pos);
+        },
+        () => {
+          this.handleLocationError(true, this.map.getCenter());
+        }
+      );
+    } else {
+      // Browser doesn't support Geolocation
+      this.handleLocationError(false, this.map.getCenter());
+    }
   }
 }
