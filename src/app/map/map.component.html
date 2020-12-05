@@ -1,0 +1,13 @@
+<div id="map2"></div>
+<span> Location: {{currentLatitude}} {{currentLongitude}}</span>
+<br/>
+<input type="text" placeholder="Upiši mjesto..." (keyup)="onKey($event)">
+<button (click)="findPlace()">Pretraga</button>
+<button (click)="showPlaces()">Prikaži</button>
+<div *ngIf="showMarkers">
+    <ul *ngFor="let place of places; let i = index">
+        <li>{{place.name}} {{place.vicinity}}</li>
+    </ul>
+</div>
+
+

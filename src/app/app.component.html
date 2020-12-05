@@ -1,8 +1,2 @@
-<div id="map"></div>
-<input type="text" placeholder="Upiši mjesto..." (keyup)="onKey($event)">
-<button (click)="findPlaces()">Pretraga</button>
-<tr *ngFor="let hero of places; let i = index">
-  <td>{{hero.name}}</td>
-  <td>{{i}}</td>
-</tr>
+<app-map></app-map>
 <router-outlet></router-outlet>
