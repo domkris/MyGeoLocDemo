@@ -1,5 +1,5 @@
 export interface PhotoInterface {
-    height: number,
-    photoReference: string,
-    width: number
+  height: number;
+  photoReference: string;
+  width: number;
 }
