@@ -59,23 +59,45 @@ export class MapComponent implements OnInit {
     }
   }
   getPlaces(): void {
-    let location = this.searchComponent.location;
-    let category = this.searchComponent.category;
-    let radius = this.searchComponent.radius;
-    let latLng =
-      location.geometry.location.latitude +
-      ',' +
-      location.geometry.location.longitude;
-    console.log(this.searchComponent.location);
-    console.log(this.location);
-
+    if (this.searchComponent.isAddressManuallyTyped) {
+      this.getNewLocationFromUsersAddress();
+      this.searchComponent.isAddressManuallyTyped = false;
+    } else {
+      let location = this.searchComponent.location;
+      let category = this.searchComponent.category;
+      let radius = this.searchComponent.radius;
+      let latLng =
+        location.geometry.location.latitude +
+        ',' +
+        location.geometry.location.longitude;
+      console.log(this.searchComponent.location);
+      console.log(this.location);
+      this.apiService
+        .getPlaces(latLng, category, radius)
+        .subscribe((places: PlaceInterface[]) => {
+          this.places = places;
+          console.log(places);
+          this.showPlaces();
+        });
+    }
+  }
+  getNewLocationFromUsersAddress() {
+    let address = this.searchComponent.formatedAddress;
     this.apiService
-      .getPlaces(latLng, category, radius)
-      .subscribe((places: PlaceInterface[]) => {
-        this.places = places;
-        console.log(places);
-        this.showPlaces();
+      .getLatLng(address)
+      .subscribe((location: GeoLocationInterface) => {
+        this.location = location;
+        this.searchComponent.location = location;
+        let latLng = new google.maps.LatLng(
+          location.geometry.location.latitude,
+          location.geometry.location.longitude
+        );
+        this.mainMarker.setPosition(latLng);
+        this.map.setCenter(latLng);
+        this.getPlaces();
+        //console.log(location);
       });
+    //console.log(address);
   }
 
   getCurrentGeoLocation(): void {

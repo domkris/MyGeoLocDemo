@@ -15,12 +15,13 @@ import { GeoLocationInterface } from 'src/app/types/GeoLocation/geolocation-inte
   styleUrls: ['./search.component.css'],
 })
 export class SearchComponent implements OnInit {
+  isAddressManuallyTyped: boolean;
   items = items;
   radius: number;
   radiusDefault: number = 1000;
   category: string;
   categoryDefaultId: number;
-  locationFormatedToAddress: string;
+  formatedAddress: string;
   markerDraggingSearchActivated: boolean;
 
   @Input() location: GeoLocationInterface;
@@ -34,10 +35,14 @@ export class SearchComponent implements OnInit {
     ).name;
     this.radius = this.radiusDefault;
     this.markerDraggingSearchActivated = false;
+    this.isAddressManuallyTyped = false;
   }
   ngOnChanges(changes: SimpleChange) {
     if (changes['location'].currentValue) {
-      console.log('ngOnChange SearchComponent Address');
+      console.log(
+        'ngOnChange SearchComponent Address',
+        changes['location'].currentValue
+      );
       this.location = changes['location'].currentValue;
       this.formatAddress();
     }
@@ -47,7 +52,8 @@ export class SearchComponent implements OnInit {
   }
 
   onKeyAddress($event) {
-    this.locationFormatedToAddress = $event.target.value;
+    this.formatedAddress = $event.target.value;
+    this.isAddressManuallyTyped = true;
   }
   onValueSelected(id: number) {
     this.category = items.find((item) => item.id == id).name;
@@ -61,7 +67,7 @@ export class SearchComponent implements OnInit {
       .length;
     switch (addressComponentsLength) {
       case 9:
-        this.locationFormatedToAddress =
+        this.formatedAddress =
           this.location.addressComponents[0].longName +
           ', ' +
           this.location.addressComponents[1].longName +
@@ -75,7 +81,7 @@ export class SearchComponent implements OnInit {
           this.location.addressComponents[6].longName;
         break;
       case 8:
-        this.locationFormatedToAddress =
+        this.formatedAddress =
           this.location.addressComponents[0].longName +
           ', ' +
           this.location.addressComponents[1].longName +
@@ -87,7 +93,7 @@ export class SearchComponent implements OnInit {
           this.location.addressComponents[6].longName;
         break;
       case 7:
-        this.locationFormatedToAddress =
+        this.formatedAddress =
           this.location.addressComponents[0].longName +
           ', ' +
           this.location.addressComponents[1].longName +
@@ -97,7 +103,7 @@ export class SearchComponent implements OnInit {
           this.location.addressComponents[5].longName;
         break;
       case 6:
-        this.locationFormatedToAddress =
+        this.formatedAddress =
           this.location.addressComponents[0].longName +
           ', ' +
           this.location.addressComponents[1].longName +
@@ -107,7 +113,7 @@ export class SearchComponent implements OnInit {
           this.location.addressComponents[4].longName;
         break;
       case 5:
-        this.locationFormatedToAddress =
+        this.formatedAddress =
           this.location.addressComponents[0].longName +
           ', ' +
           this.location.addressComponents[1].longName +
@@ -117,7 +123,7 @@ export class SearchComponent implements OnInit {
           this.getCountry();
         break;
       case 4:
-        this.locationFormatedToAddress =
+        this.formatedAddress =
           this.location.addressComponents[0].longName +
           ', ' +
           this.location.addressComponents[1].longName +
@@ -125,7 +131,7 @@ export class SearchComponent implements OnInit {
           this.location.addressComponents[3].longName;
         break;
       case 3:
-        this.locationFormatedToAddress =
+        this.formatedAddress =
           this.location.addressComponents[0].longName +
           ', ' +
           this.location.addressComponents[1].longName +
@@ -133,13 +139,13 @@ export class SearchComponent implements OnInit {
           this.location.addressComponents[2].longName;
         break;
       case 2:
-        this.locationFormatedToAddress =
+        this.formatedAddress =
           this.location.addressComponents[0].longName +
           ', ' +
           this.location.addressComponents[1].longName;
         break;
       case 1:
-        this.locationFormatedToAddress =
+        this.formatedAddress =
           this.location.addressComponents[0].longName +
           ', ' +
           this.location.addressComponents[1].longName;
