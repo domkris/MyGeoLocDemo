@@ -21,6 +21,7 @@ export class SearchComponent implements OnInit {
   category: string;
   categoryDefaultId: number;
   locationFormatedToAddress: string;
+  markerDraggingSearchActivated: boolean;
 
   @Input() location: GeoLocationInterface;
   @Output() searchPlacesEvent = new EventEmitter();
@@ -32,6 +33,7 @@ export class SearchComponent implements OnInit {
       (item) => item.id == this.categoryDefaultId
     ).name;
     this.radius = this.radiusDefault;
+    this.markerDraggingSearchActivated = false;
   }
   ngOnChanges(changes: SimpleChange) {
     if (changes['location'].currentValue) {
@@ -41,7 +43,7 @@ export class SearchComponent implements OnInit {
     }
   }
   toggleSelection($event) {
-    console.log($event.target.checked);
+    this.markerDraggingSearchActivated = $event.target.checked;
   }
 
   onKeyAddress($event) {

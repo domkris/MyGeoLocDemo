@@ -58,7 +58,7 @@ export class MapComponent implements OnInit {
       this.handleLocationError(false, this.map.getCenter());
     }
   }
-  searchPlaces(): void {
+  getPlaces(): void {
     let location = this.searchComponent.location;
     let category = this.searchComponent.category;
     let radius = this.searchComponent.radius;
@@ -83,6 +83,10 @@ export class MapComponent implements OnInit {
       .getAddress(this.latLnglocation)
       .subscribe((location: GeoLocationInterface) => {
         this.location = location;
+        this.searchComponent.location = location;
+        if (this.searchComponent.markerDraggingSearchActivated) {
+          this.getPlaces();
+        }
       });
   }
 
