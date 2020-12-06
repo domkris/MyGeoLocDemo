@@ -7,7 +7,7 @@ import {
   SimpleChange,
 } from '@angular/core';
 import { items } from 'src/app/types/types-constants';
-import { AddressInterface } from '../types/Address/address-interface';
+import { GeoLocationInterface } from 'src/app/types/GeoLocation/geolocation-interface';
 
 @Component({
   selector: 'app-search',
@@ -22,7 +22,7 @@ export class SearchComponent implements OnInit {
   categoryDefaultId: number;
   locationFormatedToAddress: string;
 
-  @Input() location: AddressInterface;
+  @Input() location: GeoLocationInterface;
   @Output() searchPlacesEvent = new EventEmitter();
   constructor() {}
 

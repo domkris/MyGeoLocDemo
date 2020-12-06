@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {} from 'googlemaps';
 import { ApiService } from '../services/api.service';
 import { PlaceInterface } from '../types/Place/place-interface';
-import { AddressInterface } from '../types/Address/address-interface';
+import { GeoLocationInterface } from 'src/app/types/GeoLocation/geolocation-interface';
 
 @Component({
   selector: 'app-map',
@@ -10,7 +10,7 @@ import { AddressInterface } from '../types/Address/address-interface';
   styleUrls: ['./map.component.css'],
 })
 export class MapComponent implements OnInit {
-  address: AddressInterface;
+  location: GeoLocationInterface;
   latLnglocation: string;
   mainMarker: google.maps.Marker;
   map: google.maps.Map;
@@ -55,7 +55,7 @@ export class MapComponent implements OnInit {
     }
   }
   searchPlaces(params: {
-    location: AddressInterface;
+    location: GeoLocationInterface;
     category: string;
     radius: number;
   }): void {
@@ -76,8 +76,8 @@ export class MapComponent implements OnInit {
   getCurrentAddress(): void {
     this.apiService
       .getAddress(this.latLnglocation)
-      .subscribe((address: AddressInterface) => {
-        this.address = address;
+      .subscribe((location: GeoLocationInterface) => {
+        this.location = location;
       });
   }
 
