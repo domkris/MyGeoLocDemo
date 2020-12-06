@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {} from 'googlemaps';
 import { PlacesService } from '../services/places.service';
 import { PlaceInterface } from '../types/Place/place-interface';
+import { items } from 'src/app/types/types-constants';
+import { AddressInterface } from '../types/Address/address-interface';
 
 @Component({
   selector: 'app-map',
@@ -9,8 +11,11 @@ import { PlaceInterface } from '../types/Place/place-interface';
   styleUrls: ['./map.component.css'],
 })
 export class MapComponent implements OnInit {
-  showMarkers: boolean = false;
-  searchPlace: string;
+  address: AddressInterface;
+  items = items;
+  types = DataTransferItemList;
+  radius: number = 1000;
+  location: string;
   currentLatitude: number;
   currentLongitude: number;
   currentLatLngMarker: google.maps.Marker;
@@ -22,13 +27,6 @@ export class MapComponent implements OnInit {
 
   ngOnInit(): void {
     this.initMap();
-    this.placesService.getPlaces().subscribe((places: PlaceInterface[]) => {
-      this.places = places;
-      this.places.forEach((place) => {
-        console.log(place);
-        //this.addMarker({ lat : place.geometry.location.latitude, lng : place.geometry.location.longitude})
-      });
-    });
   }
   initMap(): void {
     if (navigator.geolocation) {
@@ -43,14 +41,13 @@ export class MapComponent implements OnInit {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
             },
-            zoom: 12,
+            zoom: 13,
           });
-          this.addMarker(pos);
+          this.addcurrentLatLngMarker(pos);
           this.currentLatitude = position.coords.latitude;
           this.currentLongitude = position.coords.longitude;
-          console.log(
-            'LAT: ' + this.currentLatitude + '  LNG: ' + this.currentLongitude
-          );
+          this.location = this.currentLatitude + ',' + this.currentLongitude;
+          this.getCurrentAddress(this.location);
         },
         () => {
           this.handleLocationError(true, this.map.getCenter());
@@ -62,31 +59,60 @@ export class MapComponent implements OnInit {
     }
   }
 
-  onKey($event) {
-    this.searchPlace = $event.target.value;
-    console.log(this.searchPlace);
+  getCurrentPlaces(location: string) {
+    this.places = [];
+    this.placesService
+      .getPlaces(this.location, 'restaurant', this.radius)
+      .subscribe((places: PlaceInterface[]) => {
+        this.places = places;
+        this.showPlaces();
+      });
   }
-  addMarker(pos: { lat: number; lng: number }) {
+  getCurrentAddress(location: string) {
+    this.placesService
+      .getAddress(this.location)
+      .subscribe((address: AddressInterface) => {
+        this.address = address;
+        console.log(this.address.addressComponents);
+      });
+  }
+  onKeyRadius($event) {
+    this.radius = $event.target.value;
+  }
+  onKeyAddress($event) {
+    console.log('Nismo jos napravili');
+  }
+  addcurrentLatLngMarker(pos: { lat: number; lng: number }) {
     this.currentLatLngMarker = new google.maps.Marker({
       position: pos,
       map: this.map,
       draggable: true,
       animation: google.maps.Animation.DROP,
     });
+
     // getting-lat-lng-from-google-marker on DRAG
     google.maps.event.addListener(
       this.currentLatLngMarker,
       'dragend',
-      (event) => {
-        console.log('dd');
-        this.currentLatitude = this.currentLatLngMarker.getPosition().lat();
-        this.currentLongitude = this.currentLatLngMarker.getPosition().lng();
-
-        // center the map as well
-        this.map.setCenter(this.currentLatLngMarker.getPosition());
-      }
+      (event) => this.currentLatLngMarkerOnDrag(event)
     );
   }
+
+  currentLatLngMarkerOnDrag(event: any) {
+    this.currentLatitude = event.latLng.lat();
+    this.currentLongitude = event.latLng.lng();
+    this.location = this.currentLatitude + ',' + this.currentLongitude;
+
+    // center the map as well
+    this.map.setCenter(this.currentLatLngMarker.getPosition());
+
+    for (let i = 0; i < this.markers.length; i++) {
+      this.markers[i].setMap(null);
+    }
+    this.getCurrentPlaces(this.location);
+    this.getCurrentAddress(this.location);
+  }
+
   handleLocationError(browserHasGeolocation: boolean, pos: google.maps.LatLng) {
     this.infoWindow.setPosition(pos);
     this.infoWindow.setContent(
@@ -96,17 +122,8 @@ export class MapComponent implements OnInit {
     );
     this.infoWindow.open(this.map);
   }
-  findPlace(): void {
-    this.showMarkers = false;
-    for (let i = 0; i < this.markers.length; i++) {
-      this.markers[i].setMap(null);
-    }
-    console.log('Find place KLIK');
-  }
-  showPlaces(): void {
-    this.showMarkers = true;
-    console.log('Show places KLIK');
 
+  showPlaces(): void {
     this.places.forEach((place) => {
       var icon = {
         url: place.icon, // url

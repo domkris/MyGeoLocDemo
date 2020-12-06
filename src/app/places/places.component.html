@@ -1,1 +1,9 @@
-<p>places works!</p>
+<h1>Mjesta</h1>
+<div class="container">
+  <hr />
+  <div>
+    <ul *ngFor="let place of places; let i = index">
+      <li>{{ place.name }} {{ place.vicinity }}</li>
+    </ul>
+  </div>
+</div>
