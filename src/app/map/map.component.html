@@ -3,7 +3,7 @@
   <div class="searchDiv">
     <app-search
       [location]="location"
-      (searchPlacesEvent)="searchPlaces($event)"
+      (searchPlacesEvent)="searchPlaces()"
     ></app-search>
   </div>
   <div class="placesDiv" *ngIf="places">

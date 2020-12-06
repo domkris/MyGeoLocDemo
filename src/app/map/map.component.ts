@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {} from 'googlemaps';
 import { ApiService } from '../services/api.service';
 import { PlaceInterface } from '../types/Place/place-interface';
 import { GeoLocationInterface } from 'src/app/types/GeoLocation/geolocation-interface';
+import { SearchComponent } from '../search/search.component';
 
 @Component({
   selector: 'app-map',
@@ -17,6 +18,9 @@ export class MapComponent implements OnInit {
   infoWindow: google.maps.InfoWindow;
   markers: google.maps.Marker[] = [];
   places: PlaceInterface[];
+
+  @ViewChild(SearchComponent)
+  private searchComponent: SearchComponent;
   constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
@@ -42,8 +46,8 @@ export class MapComponent implements OnInit {
           this.latLnglocation =
             position.coords.latitude + ',' + position.coords.longitude;
 
-          // GET CURRENT ADDRESS OBJECT FROM API
-          this.getCurrentAddress();
+          // GET CURRENT GEOLOCATION OBJECT FROM API
+          this.getCurrentGeoLocation();
         },
         () => {
           this.handleLocationError(true, this.map.getCenter());
@@ -54,18 +58,19 @@ export class MapComponent implements OnInit {
       this.handleLocationError(false, this.map.getCenter());
     }
   }
-  searchPlaces(params: {
-    location: GeoLocationInterface;
-    category: string;
-    radius: number;
-  }): void {
-    console.log(params);
+  searchPlaces(): void {
+    let location = this.searchComponent.location;
+    let category = this.searchComponent.category;
+    let radius = this.searchComponent.radius;
     let latLng =
-      params.location.geometry.location.latitude +
+      location.geometry.location.latitude +
       ',' +
-      params.location.geometry.location.longitude;
+      location.geometry.location.longitude;
+    console.log(this.searchComponent.location);
+    console.log(this.location);
+
     this.apiService
-      .getPlaces(latLng, params.category, params.radius)
+      .getPlaces(latLng, category, radius)
       .subscribe((places: PlaceInterface[]) => {
         this.places = places;
         console.log(places);
@@ -73,7 +78,7 @@ export class MapComponent implements OnInit {
       });
   }
 
-  getCurrentAddress(): void {
+  getCurrentGeoLocation(): void {
     this.apiService
       .getAddress(this.latLnglocation)
       .subscribe((location: GeoLocationInterface) => {
@@ -97,12 +102,11 @@ export class MapComponent implements OnInit {
 
   onDraggingMainMarker(event: any): void {
     this.latLnglocation = event.latLng.lat() + ',' + event.latLng.lng();
-
     // center the map as well
     //this.map.setCenter(this.mainMarker.getPosition());
     this.places = null;
     this.removePreviousMarkersFromMap();
-    this.getCurrentAddress();
+    this.getCurrentGeoLocation();
   }
 
   handleLocationError(browserHasGeolocation: boolean, pos: google.maps.LatLng) {
@@ -116,49 +120,60 @@ export class MapComponent implements OnInit {
   }
 
   showPlaces(): void {
-    if (this.markers.length != 0) {
-      this.removePreviousMarkersFromMap();
-    }
+    this.removePreviousMarkersFromMap();
     this.places.forEach((place) => {
-      var icon = {
-        url: place.icon, // url
-        scaledSize: new google.maps.Size(25, 25), // scaled size
-        origin: new google.maps.Point(0, 0), // origin
-        anchor: new google.maps.Point(0, 0), // anchor
-      };
+      const marker = this.createMarkerForPlace(place);
+      const infoWindow = this.createInfoWindow(place);
+      this.addClickEvent(marker, infoWindow);
+    });
+  }
+  addClickEvent(
+    marker: google.maps.Marker,
+    infoWindow: google.maps.InfoWindow
+  ) {
+    var clicked = false;
+    marker.addListener('click', () => {
+      if (clicked) {
+        infoWindow.close();
+      } else {
+        infoWindow.open(this.map, marker);
+      }
+      clicked = !clicked;
+    });
+  }
+  createMarkerForPlace(place: PlaceInterface): google.maps.Marker {
+    var icon = {
+      url: place.icon, // url
+      scaledSize: new google.maps.Size(25, 25), // scaled size
+      origin: new google.maps.Point(0, 0), // origin
+      anchor: new google.maps.Point(0, 0), // anchor
+    };
 
-      const pos = {
-        lat: place.geometry.location.latitude,
-        lng: place.geometry.location.longitude,
-      };
+    const pos = {
+      lat: place.geometry.location.latitude,
+      lng: place.geometry.location.longitude,
+    };
 
-      const marker = new google.maps.Marker({
-        position: pos,
-        map: this.map,
-        draggable: true,
-        icon: icon,
-        animation: google.maps.Animation.DROP,
-      });
-      this.markers.push(marker);
-
-      var infoWindow = new google.maps.InfoWindow({
-        content: '<h1>' + place.name + '</h1> <h2>' + place.vicinity + '</h2> ',
-      });
-
-      var clicked = false;
-      marker.addListener('click', () => {
-        if (clicked) {
-          infoWindow.close();
-        } else {
-          infoWindow.open(this.map, marker);
-        }
-        clicked = !clicked;
-      });
+    const marker = new google.maps.Marker({
+      position: pos,
+      map: this.map,
+      draggable: true,
+      icon: icon,
+      animation: google.maps.Animation.DROP,
+    });
+    this.markers.push(marker);
+    return marker;
+  }
+  createInfoWindow(place: PlaceInterface): google.maps.InfoWindow {
+    return new google.maps.InfoWindow({
+      content: '<h1>' + place.name + '</h1> <h2>' + place.vicinity + '</h2> ',
     });
   }
   removePreviousMarkersFromMap(): void {
-    for (let i = 0; i < this.markers.length; i++) {
-      this.markers[i].setMap(null);
+    if (this.markers.length != 0) {
+      for (let i = 0; i < this.markers.length; i++) {
+        this.markers[i].setMap(null);
+      }
     }
   }
 }

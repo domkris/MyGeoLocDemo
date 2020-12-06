@@ -35,9 +35,13 @@ export class SearchComponent implements OnInit {
   }
   ngOnChanges(changes: SimpleChange) {
     if (changes['location'].currentValue) {
+      console.log('ngOnChange SearchComponent Address');
       this.location = changes['location'].currentValue;
       this.formatAddress();
     }
+  }
+  toggleSelection($event) {
+    console.log($event.target.checked);
   }
 
   onKeyAddress($event) {

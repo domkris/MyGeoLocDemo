@@ -30,15 +30,7 @@
     (keyup)="onKeyRadius($event)"
     [value]="radius"
   />
-  <button
-    (click)="
-      searchPlacesEvent.emit({
-        location: location,
-        category: category,
-        radius: radius
-      })
-    "
-  >
-    Pretraga
-  </button>
+  <label for="checkbox">Pretraga pomicanjem markera</label>
+  <input id="one" type="checkbox" (click)="toggleSelection($event)" />
+  <button (click)="searchPlacesEvent.emit()">Pretraga</button>
 </div>
