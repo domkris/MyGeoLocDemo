@@ -11,6 +11,7 @@ import { AddressInterface } from '../types/Address/address-interface';
   styleUrls: ['./map.component.css'],
 })
 export class MapComponent implements OnInit {
+  addressFormated: string;
   address: AddressInterface;
   items = items;
   types = DataTransferItemList;
@@ -47,7 +48,7 @@ export class MapComponent implements OnInit {
           this.currentLatitude = position.coords.latitude;
           this.currentLongitude = position.coords.longitude;
           this.location = this.currentLatitude + ',' + this.currentLongitude;
-          this.getCurrentAddress(this.location);
+          this.getCurrentAddress();
         },
         () => {
           this.handleLocationError(true, this.map.getCenter());
@@ -68,13 +69,109 @@ export class MapComponent implements OnInit {
         this.showPlaces();
       });
   }
-  getCurrentAddress(location: string) {
+  getCurrentAddress() {
     this.placesService
       .getAddress(this.location)
       .subscribe((address: AddressInterface) => {
         this.address = address;
+        this.formatAddress();
         console.log(this.address.addressComponents);
       });
+  }
+  formatAddress() {
+    let addressComponentsLength: number = this.address.addressComponents.length;
+    switch (addressComponentsLength) {
+      case 9:
+        this.addressFormated =
+          this.address.addressComponents[0].longName +
+          ', ' +
+          this.address.addressComponents[1].longName +
+          ', ' +
+          this.address.addressComponents[2].longName +
+          ', ' +
+          this.address.addressComponents[3].longName +
+          ', ' +
+          this.address.addressComponents[5].longName +
+          ', ' +
+          this.address.addressComponents[6].longName;
+        break;
+      case 8:
+        this.addressFormated =
+          this.address.addressComponents[0].longName +
+          ', ' +
+          this.address.addressComponents[1].longName +
+          ', ' +
+          this.address.addressComponents[2].longName +
+          ', ' +
+          this.address.addressComponents[3].longName +
+          ', ' +
+          this.address.addressComponents[6].longName;
+        break;
+      case 7:
+        this.addressFormated =
+          this.address.addressComponents[0].longName +
+          ', ' +
+          this.address.addressComponents[1].longName +
+          ', ' +
+          this.address.addressComponents[2].longName +
+          ', ' +
+          this.address.addressComponents[5].longName;
+        break;
+      case 6:
+        this.addressFormated =
+          this.address.addressComponents[0].longName +
+          ', ' +
+          this.address.addressComponents[1].longName +
+          ', ' +
+          this.address.addressComponents[2].longName +
+          ', ' +
+          this.address.addressComponents[4].longName;
+        break;
+      case 5:
+        this.addressFormated =
+          this.address.addressComponents[0].longName +
+          ', ' +
+          this.address.addressComponents[1].longName +
+          ', ' +
+          this.address.addressComponents[2].longName +
+          ', ' +
+          this.getCountry();
+        break;
+      case 4:
+        this.addressFormated =
+          this.address.addressComponents[0].longName +
+          ', ' +
+          this.address.addressComponents[1].longName +
+          ', ' +
+          this.address.addressComponents[3].longName;
+        break;
+      case 3:
+        this.addressFormated =
+          this.address.addressComponents[0].longName +
+          ', ' +
+          this.address.addressComponents[1].longName +
+          ', ' +
+          this.address.addressComponents[2].longName;
+        break;
+      case 2:
+        this.addressFormated =
+          this.address.addressComponents[0].longName +
+          ', ' +
+          this.address.addressComponents[1].longName;
+        break;
+      case 1:
+        this.addressFormated =
+          this.address.addressComponents[0].longName +
+          ', ' +
+          this.address.addressComponents[1].longName;
+        break;
+        break;
+    }
+  }
+  getCountry(): string {
+    return this.address.addressComponents[3].types.includes('country')
+      ? this.address.addressComponents[3].longName
+      : this.address.addressComponents[4].longName;
   }
   onKeyRadius($event) {
     this.radius = $event.target.value;
@@ -110,7 +207,7 @@ export class MapComponent implements OnInit {
       this.markers[i].setMap(null);
     }
     this.getCurrentPlaces(this.location);
-    this.getCurrentAddress(this.location);
+    this.getCurrentAddress();
   }
 
   handleLocationError(browserHasGeolocation: boolean, pos: google.maps.LatLng) {

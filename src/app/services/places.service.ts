@@ -8,12 +8,6 @@ import { PlaceInterface } from '../types/Place/place-interface';
 export class PlacesService {
   location: string;
   constructor(private http: HttpClient) {}
-  //   url: string =
-  //     'https://localhost:44311/places/search?location=43.5081,16.4402&radius=1000&type=restaurant&keyword=cruise';
-
-  //   getPlaces(): Observable<PlaceInterface[]> {
-  //     return this.http.get<PlaceInterface[]>(this.url);
-  //   }
 
   getAddress(latlng: string): Observable<AddressInterface> {
     let url = new URL('https://localhost:44311/latlngtoaddress/search/');
@@ -21,8 +15,7 @@ export class PlacesService {
     return this.http.get<AddressInterface>(url.toString());
   }
 
-  getLatLngFromAddress(location: string) {}
-  getCategories() {}
+  getLatLng() {}
   getPlaces(
     location: string,
     type: string,

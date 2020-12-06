@@ -8,7 +8,6 @@ import { PlaceInterface } from 'src/app/types/Place/place-interface';
 })
 export class PlacesComponent implements OnInit {
   @Input() places: PlaceInterface[];
-  @Input() location: string;
   constructor() {}
 
   ngOnInit(): void {}
