@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {} from 'googlemaps';
-import { PlacesService } from '../services/places.service';
+import { ApiService } from '../services/api.service';
 import { PlaceInterface } from '../types/Place/place-interface';
-import { items } from 'src/app/types/types-constants';
 import { AddressInterface } from '../types/Address/address-interface';
 
 @Component({
@@ -11,20 +10,14 @@ import { AddressInterface } from '../types/Address/address-interface';
   styleUrls: ['./map.component.css'],
 })
 export class MapComponent implements OnInit {
-  addressFormated: string;
   address: AddressInterface;
-  items = items;
-  types = DataTransferItemList;
-  radius: number = 1000;
-  location: string;
-  currentLatitude: number;
-  currentLongitude: number;
-  currentLatLngMarker: google.maps.Marker;
+  latLnglocation: string;
+  mainMarker: google.maps.Marker;
   map: google.maps.Map;
   infoWindow: google.maps.InfoWindow;
   markers: google.maps.Marker[] = [];
   places: PlaceInterface[];
-  constructor(private placesService: PlacesService) {}
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
     this.initMap();
@@ -44,10 +37,12 @@ export class MapComponent implements OnInit {
             },
             zoom: 13,
           });
-          this.addcurrentLatLngMarker(pos);
-          this.currentLatitude = position.coords.latitude;
-          this.currentLongitude = position.coords.longitude;
-          this.location = this.currentLatitude + ',' + this.currentLongitude;
+          // DRAW THE MARKER  OF CURRENT LOCATION ON THE MAP
+          this.showMainMarker(pos);
+          this.latLnglocation =
+            position.coords.latitude + ',' + position.coords.longitude;
+
+          // GET CURRENT ADDRESS OBJECT FROM API
           this.getCurrentAddress();
         },
         () => {
@@ -59,128 +54,35 @@ export class MapComponent implements OnInit {
       this.handleLocationError(false, this.map.getCenter());
     }
   }
-
-  getCurrentPlaces(location: string) {
-    this.places = [];
-    this.placesService
-      .getPlaces(this.location, 'restaurant', this.radius)
+  searchPlaces(params: {
+    location: AddressInterface;
+    category: string;
+    radius: number;
+  }): void {
+    console.log(params);
+    let latLng =
+      params.location.geometry.location.latitude +
+      ',' +
+      params.location.geometry.location.longitude;
+    this.apiService
+      .getPlaces(latLng, params.category, params.radius)
       .subscribe((places: PlaceInterface[]) => {
         this.places = places;
+        console.log(places);
         this.showPlaces();
       });
   }
-  getCurrentAddress() {
-    this.placesService
-      .getAddress(this.location)
+
+  getCurrentAddress(): void {
+    this.apiService
+      .getAddress(this.latLnglocation)
       .subscribe((address: AddressInterface) => {
         this.address = address;
-        this.formatAddress();
-        console.log(this.address.addressComponents);
       });
   }
-  formatAddress() {
-    let addressComponentsLength: number = this.address.addressComponents.length;
-    switch (addressComponentsLength) {
-      case 9:
-        this.addressFormated =
-          this.address.addressComponents[0].longName +
-          ', ' +
-          this.address.addressComponents[1].longName +
-          ', ' +
-          this.address.addressComponents[2].longName +
-          ', ' +
-          this.address.addressComponents[3].longName +
-          ', ' +
-          this.address.addressComponents[5].longName +
-          ', ' +
-          this.address.addressComponents[6].longName;
-        break;
-      case 8:
-        this.addressFormated =
-          this.address.addressComponents[0].longName +
-          ', ' +
-          this.address.addressComponents[1].longName +
-          ', ' +
-          this.address.addressComponents[2].longName +
-          ', ' +
-          this.address.addressComponents[3].longName +
-          ', ' +
-          this.address.addressComponents[6].longName;
-        break;
-      case 7:
-        this.addressFormated =
-          this.address.addressComponents[0].longName +
-          ', ' +
-          this.address.addressComponents[1].longName +
-          ', ' +
-          this.address.addressComponents[2].longName +
-          ', ' +
-          this.address.addressComponents[5].longName;
-        break;
-      case 6:
-        this.addressFormated =
-          this.address.addressComponents[0].longName +
-          ', ' +
-          this.address.addressComponents[1].longName +
-          ', ' +
-          this.address.addressComponents[2].longName +
-          ', ' +
-          this.address.addressComponents[4].longName;
-        break;
-      case 5:
-        this.addressFormated =
-          this.address.addressComponents[0].longName +
-          ', ' +
-          this.address.addressComponents[1].longName +
-          ', ' +
-          this.address.addressComponents[2].longName +
-          ', ' +
-          this.getCountry();
-        break;
-      case 4:
-        this.addressFormated =
-          this.address.addressComponents[0].longName +
-          ', ' +
-          this.address.addressComponents[1].longName +
-          ', ' +
-          this.address.addressComponents[3].longName;
-        break;
-      case 3:
-        this.addressFormated =
-          this.address.addressComponents[0].longName +
-          ', ' +
-          this.address.addressComponents[1].longName +
-          ', ' +
-          this.address.addressComponents[2].longName;
-        break;
-      case 2:
-        this.addressFormated =
-          this.address.addressComponents[0].longName +
-          ', ' +
-          this.address.addressComponents[1].longName;
-        break;
-      case 1:
-        this.addressFormated =
-          this.address.addressComponents[0].longName +
-          ', ' +
-          this.address.addressComponents[1].longName;
-        break;
-        break;
-    }
-  }
-  getCountry(): string {
-    return this.address.addressComponents[3].types.includes('country')
-      ? this.address.addressComponents[3].longName
-      : this.address.addressComponents[4].longName;
-  }
-  onKeyRadius($event) {
-    this.radius = $event.target.value;
-  }
-  onKeyAddress($event) {
-    console.log('Nismo jos napravili');
-  }
-  addcurrentLatLngMarker(pos: { lat: number; lng: number }) {
-    this.currentLatLngMarker = new google.maps.Marker({
+
+  showMainMarker(pos: { lat: number; lng: number }): void {
+    this.mainMarker = new google.maps.Marker({
       position: pos,
       map: this.map,
       draggable: true,
@@ -188,25 +90,18 @@ export class MapComponent implements OnInit {
     });
 
     // getting-lat-lng-from-google-marker on DRAG
-    google.maps.event.addListener(
-      this.currentLatLngMarker,
-      'dragend',
-      (event) => this.currentLatLngMarkerOnDrag(event)
+    google.maps.event.addListener(this.mainMarker, 'dragend', (event) =>
+      this.onDraggingMainMarker(event)
     );
   }
 
-  currentLatLngMarkerOnDrag(event: any) {
-    this.currentLatitude = event.latLng.lat();
-    this.currentLongitude = event.latLng.lng();
-    this.location = this.currentLatitude + ',' + this.currentLongitude;
+  onDraggingMainMarker(event: any): void {
+    this.latLnglocation = event.latLng.lat() + ',' + event.latLng.lng();
 
     // center the map as well
-    this.map.setCenter(this.currentLatLngMarker.getPosition());
-
-    for (let i = 0; i < this.markers.length; i++) {
-      this.markers[i].setMap(null);
-    }
-    this.getCurrentPlaces(this.location);
+    //this.map.setCenter(this.mainMarker.getPosition());
+    this.places = null;
+    this.removePreviousMarkersFromMap();
     this.getCurrentAddress();
   }
 
@@ -221,6 +116,9 @@ export class MapComponent implements OnInit {
   }
 
   showPlaces(): void {
+    if (this.markers.length != 0) {
+      this.removePreviousMarkersFromMap();
+    }
     this.places.forEach((place) => {
       var icon = {
         url: place.icon, // url
@@ -257,5 +155,10 @@ export class MapComponent implements OnInit {
         clicked = !clicked;
       });
     });
+  }
+  removePreviousMarkersFromMap(): void {
+    for (let i = 0; i < this.markers.length; i++) {
+      this.markers[i].setMap(null);
+    }
   }
 }

@@ -6,19 +6,14 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PlacesComponent } from './places/places.component';
 import { MapComponent } from './map/map.component';
-import { PlacesService } from './services/places.service';
-import { LocationComponent } from './location/location.component';
+import { ApiService } from './services/api.service';
 import { FormsModule } from '@angular/forms';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    PlacesComponent,
-    MapComponent,
-    LocationComponent,
-  ],
+  declarations: [AppComponent, PlacesComponent, MapComponent, SearchComponent],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
-  providers: [PlacesService],
+  providers: [ApiService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

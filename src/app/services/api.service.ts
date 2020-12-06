@@ -5,17 +5,20 @@ import { AddressInterface } from '../types/Address/address-interface';
 import { PlaceInterface } from '../types/Place/place-interface';
 
 @Injectable()
-export class PlacesService {
-  location: string;
+export class ApiService {
   constructor(private http: HttpClient) {}
 
   getAddress(latlng: string): Observable<AddressInterface> {
-    let url = new URL('https://localhost:44311/latlngtoaddress/search/');
+    let url = new URL('https://localhost:44311/address/search/');
     url.searchParams.append('latlng', latlng);
     return this.http.get<AddressInterface>(url.toString());
   }
 
-  getLatLng() {}
+  getLatLng(address: string): Observable<AddressInterface> {
+    let url = new URL('https://localhost:44311/latlng/search/');
+    url.searchParams.append('address', address);
+    return this.http.get<AddressInterface>(url.toString());
+  }
   getPlaces(
     location: string,
     type: string,

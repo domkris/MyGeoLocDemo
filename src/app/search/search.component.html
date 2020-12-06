@@ -1,0 +1,44 @@
+<div class="container">
+  <h1>Pretraga</h1>
+  <p>Popunite polja kako bi potražili mjesto</p>
+  <hr />
+  <label for="address"><b>Adresa</b></label>
+  <input
+    type="text"
+    placeholder="Upišite adresu"
+    name="address"
+    id="address"
+    [value]="locationFormatedToAddress"
+    (keyup)="onKeyAddress($event)"
+  />
+  <label for="category"><b>Kategorija</b></label>
+  <select
+    name="categories"
+    id="categories"
+    [(ngModel)]="categoryDefaultId"
+    (ngModelChange)="onValueSelected($event)"
+  >
+    <option [value]="item.id" *ngFor="let item of items">
+      {{ item.name }}
+    </option>
+  </select>
+  <label for="radius"><b>U kurgu od metara:</b></label>
+  <input
+    type="text"
+    name="radius"
+    id="radius"
+    (keyup)="onKeyRadius($event)"
+    [value]="radius"
+  />
+  <button
+    (click)="
+      searchPlacesEvent.emit({
+        location: location,
+        category: category,
+        radius: radius
+      })
+    "
+  >
+    Pretraga
+  </button>
+</div>

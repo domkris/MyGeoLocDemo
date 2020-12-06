@@ -1,26 +1,12 @@
 <div id="map2"></div>
-<app-location [location]="addressFormated"></app-location>
-<br />
 <div class="container">
-  <h1>Pretraga</h1>
-  <p>Popunite polja kako bi potražili mjesto</p>
-  <hr />
-  <label for="address"><b>Adresa</b></label>
-  <input
-    type="text"
-    placeholder="Upišite adresu"
-    name="address"
-    id="address"
-    (keyup)="onKeyAddress($event)"
-  />
-  <label for="category"><b>Kategorija</b></label>
-  <select name="categories" id="categories">
-    <option [value]="item.id" *ngFor="let item of items">
-      {{ item.name }}
-    </option>
-  </select>
-  <label for="radius"><b>U kurgu od metara:</b></label>
-  <input type="text" name="radius" id="radius" (keyup)="onKeyRadius($event)" />
-  <button (click)="getCurrentPlaces(location)">Prikaži</button>
+  <div class="searchDiv">
+    <app-search
+      [location]="address"
+      (searchPlacesEvent)="searchPlaces($event)"
+    ></app-search>
+  </div>
+  <div class="placesDiv" *ngIf="places">
+    <app-places [places]="places"></app-places>
+  </div>
 </div>
-<app-places [places]="places"></app-places>
