@@ -1,36 +1,51 @@
 <div class="container">
-  <h1>Pretraga</h1>
-  <p>Popunite polja kako bi potražili mjesto</p>
   <hr />
-  <label for="address"><b>Adresa</b></label>
-  <input
-    type="text"
-    placeholder="Upišite adresu"
-    name="address"
-    id="address"
-    [value]="formatedAddress"
-    (keyup)="onKeyAddress($event)"
-  />
-  <label for="category"><b>Kategorija</b></label>
-  <select
-    name="categories"
-    id="categories"
-    [(ngModel)]="categoryDefaultId"
-    (ngModelChange)="onValueSelected($event)"
-  >
-    <option [value]="item.id" *ngFor="let item of items">
-      {{ item.name }}
-    </option>
-  </select>
-  <label for="radius"><b>U kurgu od metara:</b></label>
-  <input
-    type="text"
-    name="radius"
-    id="radius"
-    (keyup)="onKeyRadius($event)"
-    [value]="radius"
-  />
-  <label for="checkbox">Pretraga pomicanjem markera</label>
-  <input id="one" type="checkbox" (click)="toggleSelection($event)" />
-  <button (click)="searchPlacesEvent.emit()">Pretraga</button>
+  <form class="example-form">
+    <mat-form-field class="example-full-width">
+      <mat-label><b>Adresa</b></mat-label>
+      <input
+        matInput
+        [value]="formatedAddress"
+        (keyup)="onKeyAddress($event)"
+      />
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label><b>Odaberite kategoriju</b></mat-label>
+      <mat-select
+        name="categories"
+        id="categories"
+        [(ngModel)]="categoryDefaultId"
+        (ngModelChange)="onValueSelected($event)"
+      >
+        <mat-option [value]="item.id" *ngFor="let item of items">
+          {{ item.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <mat-label><b>Radijus za lokacije u metrima</b></mat-label>
+      <input
+        matInput
+        name="radius"
+        id="radius"
+        (keyup)="onKeyRadius($event)"
+        [value]="radius"
+      />
+    </mat-form-field>
+    <div id="searchDiv">
+      <mat-checkbox
+        #checkbox
+        class="example-margin"
+        (click)="toggleSelection(!checkbox.checked)"
+        ><label for="checkbox">Pretraga pomicanjem markera</label></mat-checkbox
+      >
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="searchPlacesEvent.emit()"
+      >
+        Pretraga
+      </button>
+    </div>
+  </form>
 </div>

@@ -148,6 +148,7 @@ export class MapComponent implements OnInit {
   showPlaces(): void {
     this.removePreviousMarkersFromMap();
     this.places.forEach((place) => {
+      console.log(place);
       const marker = this.createMarkerForPlace(place);
       const infoWindow = this.createInfoWindow(place);
       this.addClickEvent(marker, infoWindow);

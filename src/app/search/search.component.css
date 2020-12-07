@@ -1,0 +1,30 @@
+form {
+  display: flex;
+}
+
+mat-form-field {
+  width: 80%;
+  margin: 2%;
+}
+mat-checkbox {
+  width: 30%;
+  margin: 2%;
+}
+#searchDiv {
+  width: 40%;
+  height: 10%;
+  margin-right: 2%;
+  margin-top: 2%;
+}
+button {
+  display: block;
+}
+input {
+  margin-top: 2%;
+}
+mat-select {
+  margin-top: 2%;
+}
+mat-form-field mat-label {
+  font-size: 20px;
+}

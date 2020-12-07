@@ -37,7 +37,7 @@ export class SearchComponent implements OnInit {
     this.markerDraggingSearchActivated = false;
     this.isAddressManuallyTyped = false;
   }
-  ngOnChanges(changes: SimpleChange) {
+  ngOnChanges(changes: SimpleChange): void {
     if (changes['location'].currentValue) {
       console.log(
         'ngOnChange SearchComponent Address',
@@ -47,22 +47,22 @@ export class SearchComponent implements OnInit {
       this.formatAddress();
     }
   }
-  toggleSelection($event) {
-    this.markerDraggingSearchActivated = $event.target.checked;
+  toggleSelection(value: boolean): void {
+    this.markerDraggingSearchActivated = value;
   }
 
-  onKeyAddress($event) {
-    this.formatedAddress = $event.target.value;
+  onKeyAddress($event: Event): void {
+    this.formatedAddress = ($event.target as HTMLInputElement).value;
     this.isAddressManuallyTyped = true;
   }
-  onValueSelected(id: number) {
+  onValueSelected(id: number): void {
     this.category = items.find((item) => item.id == id).name;
   }
 
-  onKeyRadius($event) {
-    this.radius = $event.target.value;
+  onKeyRadius($event: Event): void {
+    this.radius = parseInt(($event.target as HTMLInputElement).value);
   }
-  formatAddress() {
+  formatAddress(): void {
     let addressComponentsLength: number = this.location.addressComponents
       .length;
     switch (addressComponentsLength) {
