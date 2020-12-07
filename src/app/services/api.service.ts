@@ -30,7 +30,4 @@ export class ApiService {
     url.searchParams.append('radius', radius.toString());
     return this.http.get<PlaceInterface[]>(url.toString());
   }
-  getCurrentPlace(): void {
-    console.log('YOU are here: TEST');
-  }
 }

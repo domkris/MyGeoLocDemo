@@ -15,15 +15,12 @@ export class PlacesComponent implements OnInit {
   @Input() places: PlaceInterface[];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  constructor() {
-    //this.dataSource = new MatTableDataSource(this.places);
-  }
+  constructor() {}
 
   ngOnInit(): void {
-    //this.dataSource = new MatTableDataSource(this.places);
+    this.dataSource = new MatTableDataSource(this.places);
   }
   ngAfterViewInit(): void {
-    this.dataSource = new MatTableDataSource(this.places);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }

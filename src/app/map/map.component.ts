@@ -81,7 +81,7 @@ export class MapComponent implements OnInit {
         });
     }
   }
-  getNewLocationFromUsersAddress() {
+  getNewLocationFromUsersAddress(): void {
     let address = this.searchComponent.formatedAddress;
     this.apiService
       .getLatLng(address)
@@ -135,7 +135,10 @@ export class MapComponent implements OnInit {
     this.getCurrentGeoLocation();
   }
 
-  handleLocationError(browserHasGeolocation: boolean, pos: google.maps.LatLng) {
+  handleLocationError(
+    browserHasGeolocation: boolean,
+    pos: google.maps.LatLng
+  ): void {
     this.infoWindow.setPosition(pos);
     this.infoWindow.setContent(
       browserHasGeolocation
@@ -157,7 +160,7 @@ export class MapComponent implements OnInit {
   addClickEvent(
     marker: google.maps.Marker,
     infoWindow: google.maps.InfoWindow
-  ) {
+  ): void {
     var clicked = false;
     marker.addListener('click', () => {
       if (clicked) {
