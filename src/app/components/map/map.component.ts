@@ -42,7 +42,7 @@ export class MapComponent implements OnInit {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
             },
-            zoom: 13,
+            zoom: 15,
           });
           // DRAW THE MARKER  OF CURRENT LOCATION ON THE MAP
           this.showMainMarker(pos);
@@ -143,6 +143,9 @@ export class MapComponent implements OnInit {
     google.maps.event.addListener(this.mainMarker, 'dragend', (event) =>
       this.onDraggingMainMarker(event)
     );
+  }
+  radiusSizeChangeEvent(value: number): void {
+    this.mainMarkerCircle.setRadius(value);
   }
   showCircleRadius(value: boolean): void {
     if (value) {

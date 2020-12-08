@@ -34,6 +34,7 @@ export class SearchComponent implements OnInit {
 
   @Input() location: GeoLocationInterface;
   @Output() searchPlacesEvent = new EventEmitter();
+  @Output() radiusSizeChangeEvent = new EventEmitter<number>();
   @Output() mainMarkerCircleStatusChange = new EventEmitter<boolean>();
   constructor() {}
 
@@ -76,6 +77,9 @@ export class SearchComponent implements OnInit {
 
   onKeyRadius($event: Event): void {
     this.radius = parseInt(($event.target as HTMLInputElement).value);
+    if (!Number.isNaN(this.radius)) {
+      this.radiusSizeChangeEvent.emit(this.radius);
+    }
   }
   formatAddress(): void {
     let addressComponentsLength: number = this.location.addressComponents

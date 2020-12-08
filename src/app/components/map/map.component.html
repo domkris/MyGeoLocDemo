@@ -8,6 +8,7 @@
       [location]="location"
       (searchPlacesEvent)="getPlaces()"
       (mainMarkerCircleStatusChange)="showCircleRadius($event)"
+      (radiusSizeChangeEvent)="radiusSizeChangeEvent($event)"
     ></app-search>
   </div>
   <div class="places">
