@@ -1,4 +1,4 @@
-export const items: any[] = [
+export const categories: any[] = [
   { id: 0, name: 'accounting' },
   { id: 1, name: 'airport' },
   { id: 2, name: 'amusement_park' },

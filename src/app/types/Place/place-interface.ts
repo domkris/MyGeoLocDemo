@@ -1,14 +1,14 @@
-import { GeometryPlaceInterface } from './Geometry/geometry-place-interface';
-import { OpeningHoursInterface } from './OpeningHours/openinghours-interface';
-import { PhotoInterface } from './Photo/photo-interface';
+import { GeometryPlace } from './Geometry/geometry-place-interface';
+import { OpeningHours } from './OpeningHours/openinghours-interface';
+import { Photo } from './Photo/photo-interface';
 
-export interface PlaceInterface {
+export interface Place {
   bussinesStatus: string;
-  geometry: GeometryPlaceInterface;
+  geometry: GeometryPlace;
   icon: string;
   name: string;
-  openingHours: OpeningHoursInterface;
-  photos: PhotoInterface[];
+  openingHours: OpeningHours;
+  photos: Photo[];
   typles: string[];
   vicinity: string;
 }

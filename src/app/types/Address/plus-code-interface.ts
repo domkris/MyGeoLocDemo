@@ -1,4 +1,4 @@
-export interface PlusCodeInterface {
+export interface PlusCode {
   compoundCode: string;
   globalCode: string;
 }

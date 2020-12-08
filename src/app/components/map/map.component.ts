@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {} from 'googlemaps';
 import { ApiService } from '../../services/api.service';
-import { PlaceInterface } from '../../types/Place/place-interface';
-import { GeoLocationInterface } from 'src/app/types/GeoLocation/geolocation-interface';
+import { Place } from '../../types/Place/place-interface';
+import { GeoLocation } from 'src/app/types/GeoLocation/geolocation-interface';
 import { SearchComponent } from '../search/search.component';
 import { NgProgressComponent } from 'ngx-progressbar';
 
@@ -12,14 +12,14 @@ import { NgProgressComponent } from 'ngx-progressbar';
   styleUrls: ['./map.component.css'],
 })
 export class MapComponent implements OnInit {
-  location: GeoLocationInterface;
+  location: GeoLocation;
   latLnglocation: string;
   mainMarker: google.maps.Marker;
   mainMarkerCircle: google.maps.Circle;
   map: google.maps.Map;
   infoWindow: google.maps.InfoWindow;
   markers: google.maps.Marker[] = [];
-  places: PlaceInterface[];
+  places: Place[];
 
   @ViewChild(NgProgressComponent) progressBar: NgProgressComponent;
   @ViewChild(SearchComponent)
@@ -92,7 +92,7 @@ export class MapComponent implements OnInit {
       console.log(this.location);
       this.apiService
         .getPlaces(latLng, category, radius)
-        .subscribe((places: PlaceInterface[]) => {
+        .subscribe((places: Place[]) => {
           this.places = places;
           console.log(places);
           this.showPlacesOnMap();
@@ -102,27 +102,25 @@ export class MapComponent implements OnInit {
   }
   getNewLocationFromUsersAddress(): void {
     let address = this.searchComponent.formatedAddress;
-    this.apiService
-      .getLatLng(address)
-      .subscribe((location: GeoLocationInterface) => {
-        this.location = location;
-        this.searchComponent.location = location;
-        let latLng = new google.maps.LatLng(
-          location.geometry.location.latitude,
-          location.geometry.location.longitude
-        );
-        this.mainMarker.setPosition(latLng);
-        this.map.setCenter(latLng);
-        this.getPlaces();
-        //console.log(location);
-      });
+    this.apiService.getLatLng(address).subscribe((location: GeoLocation) => {
+      this.location = location;
+      this.searchComponent.location = location;
+      let latLng = new google.maps.LatLng(
+        location.geometry.location.latitude,
+        location.geometry.location.longitude
+      );
+      this.mainMarker.setPosition(latLng);
+      this.map.setCenter(latLng);
+      this.getPlaces();
+      //console.log(location);
+    });
     //console.log(address);
   }
 
   getCurrentGeoLocation(): void {
     this.apiService
       .getAddress(this.latLnglocation)
-      .subscribe((location: GeoLocationInterface) => {
+      .subscribe((location: GeoLocation) => {
         this.location = location;
         this.searchComponent.location = location;
         if (this.searchComponent.searchByDraggingMainMarker) {
@@ -204,7 +202,7 @@ export class MapComponent implements OnInit {
       clicked = !clicked;
     });
   }
-  createMarkerForPlace(place: PlaceInterface): google.maps.Marker {
+  createMarkerForPlace(place: Place): google.maps.Marker {
     var icon = {
       url: place.icon, // url
       scaledSize: new google.maps.Size(25, 25), // scaled size
@@ -227,7 +225,7 @@ export class MapComponent implements OnInit {
     this.markers.push(marker);
     return marker;
   }
-  createInfoWindow(place: PlaceInterface): google.maps.InfoWindow {
+  createInfoWindow(place: Place): google.maps.InfoWindow {
     return new google.maps.InfoWindow({
       content: '<h1>' + place.name + '</h1> <h2>' + place.vicinity + '</h2> ',
     });

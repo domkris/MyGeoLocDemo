@@ -1,12 +1,12 @@
-import { AddressComponentsInterface } from '../Address/address-components-interface';
-import { GeometryAddressInterface } from '../Address/geometry-address-interface';
-import { PlusCodeInterface } from '../Address/plus-code-interface';
+import { AddressComponents } from '../Address/address-components-interface';
+import { GeometryAddress } from '../Address/geometry-address-interface';
+import { PlusCode } from '../Address/plus-code-interface';
 
-export interface GeoLocationInterface {
-  addressComponents: AddressComponentsInterface[];
+export interface GeoLocation {
+  addressComponents: AddressComponents[];
   formatedAddress: string;
-  geometry: GeometryAddressInterface;
+  geometry: GeometryAddress;
   placeId: string;
-  plusCode: PlusCodeInterface;
+  plusCode: PlusCode;
   typles: string[];
 }

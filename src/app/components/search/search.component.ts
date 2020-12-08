@@ -6,7 +6,7 @@ import {
   Output,
   SimpleChange,
 } from '@angular/core';
-import { items } from 'src/app/types/types-constants';
+import { categories } from 'src/app/constants/categories';
 import {
   FormControl,
   FormGroupDirective,
@@ -14,7 +14,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { GeoLocationInterface } from 'src/app/types/GeoLocation/geolocation-interface';
+import { GeoLocation } from 'src/app/types/GeoLocation/geolocation-interface';
 
 @Component({
   selector: 'app-search',
@@ -23,7 +23,7 @@ import { GeoLocationInterface } from 'src/app/types/GeoLocation/geolocation-inte
 })
 export class SearchComponent implements OnInit {
   isAddressManuallyTyped: boolean;
-  items = items;
+  categories = categories;
   radius: number;
   radiusDefault: number = 1000;
   category: string;
@@ -32,16 +32,18 @@ export class SearchComponent implements OnInit {
   searchByDraggingMainMarker: boolean;
   showMainMarkerCircle: boolean;
 
-  @Input() location: GeoLocationInterface;
+  @Input() location: GeoLocation;
   @Output() searchPlacesEvent = new EventEmitter();
   @Output() radiusSizeChangeEvent = new EventEmitter<number>();
   @Output() mainMarkerCircleStatusChange = new EventEmitter<boolean>();
   constructor() {}
 
   ngOnInit(): void {
-    this.categoryDefaultId = items.find((item) => item.name == 'restaurant').id;
-    this.category = items.find(
-      (item) => item.id == this.categoryDefaultId
+    this.categoryDefaultId = categories.find(
+      (category) => category.name == 'restaurant'
+    ).id;
+    this.category = categories.find(
+      (category) => category.id == this.categoryDefaultId
     ).name;
     this.radius = this.radiusDefault;
     this.searchByDraggingMainMarker = false;
@@ -72,7 +74,7 @@ export class SearchComponent implements OnInit {
     this.isAddressManuallyTyped = true;
   }
   onValueSelected(id: number): void {
-    this.category = items.find((item) => item.id == id).name;
+    this.category = categories.find((item) => item.id == id).name;
   }
 
   onKeyRadius($event: Event): void {

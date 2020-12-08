@@ -1,3 +1,3 @@
-export interface OpeningHoursInterface {
+export interface OpeningHours {
   openNow: boolean;
 }

@@ -1,6 +1,6 @@
-import { LocationInterface } from '../Location/location-interface';
+import { Location } from '../Location/location-interface';
 
-export interface ViewportInterface {
-  northEast: LocationInterface;
-  southWest: LocationInterface;
+export interface Viewport {
+  northEast: Location;
+  southWest: Location;
 }

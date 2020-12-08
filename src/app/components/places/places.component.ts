@@ -2,7 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { PlaceInterface } from 'src/app/types/Place/place-interface';
+import { Place } from 'src/app/types/Place/place-interface';
 
 @Component({
   selector: 'app-places',
@@ -11,8 +11,8 @@ import { PlaceInterface } from 'src/app/types/Place/place-interface';
 })
 export class PlacesComponent implements OnInit {
   displayedColumns: string[] = ['name', 'vicinity'];
-  dataSource: MatTableDataSource<PlaceInterface>;
-  @Input() places: PlaceInterface[];
+  dataSource: MatTableDataSource<Place>;
+  @Input() places: Place[];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   constructor() {}

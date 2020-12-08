@@ -1,8 +1,8 @@
-import { LocationInterface } from '../Location/location-interface';
-import { ViewportInterface } from '../Viewport/viewport-interface';
+import { Location } from '../Location/location-interface';
+import { Viewport } from '../Viewport/viewport-interface';
 
-export interface GeometryAddressInterface {
-  location: LocationInterface;
+export interface GeometryAddress {
+  location: Location;
   locationType: string;
-  viewport: ViewportInterface;
+  viewport: Viewport;
 }

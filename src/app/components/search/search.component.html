@@ -6,6 +6,7 @@
         <input
           matInput
           required
+          minlength="1"
           [value]="formatedAddress"
           (keyup)="onKeyAddress($event)"
           name="address"
@@ -21,8 +22,8 @@
           [(ngModel)]="categoryDefaultId"
           (ngModelChange)="onValueSelected($event)"
         >
-          <mat-option [value]="item.id" *ngFor="let item of items">
-            {{ item.name }}
+          <mat-option [value]="category.id" *ngFor="let category of categories">
+            {{ category.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
