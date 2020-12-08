@@ -1,44 +1,59 @@
-<div class="container">
-  <hr />
+<div class="searchContainer">
   <form class="example-form">
-    <mat-form-field class="example-full-width">
-      <mat-label><b>Adresa</b></mat-label>
-      <input
-        matInput
-        [value]="formatedAddress"
-        (keyup)="onKeyAddress($event)"
-      />
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label><b>Odaberite kategoriju</b></mat-label>
-      <mat-select
-        name="categories"
-        id="categories"
-        [(ngModel)]="categoryDefaultId"
-        (ngModelChange)="onValueSelected($event)"
-      >
-        <mat-option [value]="item.id" *ngFor="let item of items">
-          {{ item.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field class="example-full-width">
-      <mat-label><b>Radijus za lokacije u metrima</b></mat-label>
-      <input
-        matInput
-        name="radius"
-        id="radius"
-        (keyup)="onKeyRadius($event)"
-        [value]="radius"
-      />
-    </mat-form-field>
-    <div id="searchDiv">
+    <div class="address-search">
+      <mat-form-field class="example-full-width">
+        <mat-label><b>Adresa</b></mat-label>
+        <input
+          matInput
+          [value]="formatedAddress"
+          (keyup)="onKeyAddress($event)"
+        />
+      </mat-form-field>
+    </div>
+    <div class="category-search">
+      <mat-form-field appearance="fill">
+        <mat-label><b>Odaberite kategoriju</b></mat-label>
+        <mat-select
+          name="categories"
+          id="categories"
+          [(ngModel)]="categoryDefaultId"
+          (ngModelChange)="onValueSelected($event)"
+        >
+          <mat-option [value]="item.id" *ngFor="let item of items">
+            {{ item.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="radius-search">
+      <mat-form-field class="example-full-width">
+        <mat-label><b>Radijus za lokacije u metrima</b></mat-label>
+        <input
+          matInput
+          name="radius"
+          id="radius"
+          (keyup)="onKeyRadius($event)"
+          [value]="radius"
+        />
+      </mat-form-field>
+    </div>
+    <div class="search-checkbox">
       <mat-checkbox
-        #checkbox
+        #checkboxMarker
         class="example-margin"
-        (click)="toggleSelection(!checkbox.checked)"
+        (click)="
+          toggleSearchWithMarkerDraggingSelection(!checkboxMarker.checked)
+        "
         ><label for="checkbox">Pretraga pomicanjem markera</label></mat-checkbox
       >
+      <mat-checkbox
+        #checkboxCircle
+        class="example-margin"
+        (click)="toggleShowMarkerCircleSelection(!checkboxCircle.checked)"
+        ><label for="checkbox">Prikaži radijus</label></mat-checkbox
+      >
+    </div>
+    <div class="search-button">
       <button
         mat-raised-button
         color="primary"

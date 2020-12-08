@@ -1,12 +1,18 @@
-<div class="container">
-  <div id="map2"></div>
-  <div class="searchDiv">
+<div class="mapContainer">
+  <div class="map">
+    <div id="map2"></div>
+  </div>
+
+  <div class="search">
     <app-search
       [location]="location"
       (searchPlacesEvent)="getPlaces()"
+      (mainMarkerCircleStatusChange)="showCircleRadius($event)"
     ></app-search>
   </div>
-  <div class="placesDiv" *ngIf="places">
-    <app-places [places]="places"></app-places>
+  <div class="places">
+    <div *ngIf="places">
+      <app-places [places]="places"></app-places>
+    </div>
   </div>
 </div>

@@ -1,11 +1,23 @@
-h1 {
-  margin: 0 auto;
-  text-align: center;
+table {
+  width: 100%;
+  margin-bottom: 2%;
+  text-align: end;
 }
-.placesContainer {
-  width: 90%;
-  margin: 0 auto;
+
+.mat-column-name {
+  width: 80%;
+  font-size: 1rem;
 }
-td {
-  width: 70%;
+.mat-column-vicinity {
+  width: 100%;
+  font-size: 1rem;
+}
+
+.mat-footer-row,
+.mat-header-row,
+.mat-row {
+  display: inline-flex;
+  min-width: 100%;
+  align-items: center;
+  text-align: start;
 }

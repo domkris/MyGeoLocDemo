@@ -14,6 +14,7 @@ export class MapComponent implements OnInit {
   location: GeoLocationInterface;
   latLnglocation: string;
   mainMarker: google.maps.Marker;
+  mainMarkerCircle: google.maps.Circle;
   map: google.maps.Map;
   infoWindow: google.maps.InfoWindow;
   markers: google.maps.Marker[] = [];
@@ -43,6 +44,7 @@ export class MapComponent implements OnInit {
           });
           // DRAW THE MARKER  OF CURRENT LOCATION ON THE MAP
           this.showMainMarker(pos);
+          this.createMainMarkerCircle();
           this.latLnglocation =
             position.coords.latitude + ',' + position.coords.longitude;
 
@@ -58,7 +60,20 @@ export class MapComponent implements OnInit {
       this.handleLocationError(false, this.map.getCenter());
     }
   }
+  createMainMarkerCircle(): void {
+    this.mainMarkerCircle = new google.maps.Circle({
+      strokeColor: '#FF0000',
+      strokeOpacity: 0.6,
+      strokeWeight: 1,
+      fillColor: '#FF0000',
+      fillOpacity: 0.08,
+      map: this.map,
+      center: null,
+      radius: null,
+    });
+  }
   getPlaces(): void {
+    this.places = null;
     if (this.searchComponent.isAddressManuallyTyped) {
       this.getNewLocationFromUsersAddress();
       this.searchComponent.isAddressManuallyTyped = false;
@@ -77,7 +92,7 @@ export class MapComponent implements OnInit {
         .subscribe((places: PlaceInterface[]) => {
           this.places = places;
           console.log(places);
-          this.showPlaces();
+          this.showPlacesOnMap();
         });
     }
   }
@@ -106,7 +121,7 @@ export class MapComponent implements OnInit {
       .subscribe((location: GeoLocationInterface) => {
         this.location = location;
         this.searchComponent.location = location;
-        if (this.searchComponent.markerDraggingSearchActivated) {
+        if (this.searchComponent.searchByDraggingMainMarker) {
           this.getPlaces();
         }
       });
@@ -125,12 +140,22 @@ export class MapComponent implements OnInit {
       this.onDraggingMainMarker(event)
     );
   }
-
+  showCircleRadius(value: boolean): void {
+    if (value) {
+      this.mainMarkerCircle.setMap(this.map);
+      this.mainMarkerCircle.setRadius(this.searchComponent.radius);
+      this.mainMarkerCircle.setCenter(this.mainMarker.getPosition());
+    } else {
+      this.mainMarkerCircle.setMap(null);
+      this.mainMarkerCircle.setRadius(null);
+      this.mainMarkerCircle.setCenter(null);
+    }
+  }
   onDraggingMainMarker(event: any): void {
     this.latLnglocation = event.latLng.lat() + ',' + event.latLng.lng();
     // center the map as well
     //this.map.setCenter(this.mainMarker.getPosition());
-    this.places = null;
+    this.mainMarkerCircle.setCenter(this.mainMarker.getPosition());
     this.removePreviousMarkersFromMap();
     this.getCurrentGeoLocation();
   }
@@ -148,16 +173,17 @@ export class MapComponent implements OnInit {
     this.infoWindow.open(this.map);
   }
 
-  showPlaces(): void {
+  showPlacesOnMap(): void {
     this.removePreviousMarkersFromMap();
+    this.mainMarkerCircle.setCenter(this.mainMarker.getPosition());
     this.places.forEach((place) => {
-      console.log(place);
+      //console.log(place);
       const marker = this.createMarkerForPlace(place);
       const infoWindow = this.createInfoWindow(place);
-      this.addClickEvent(marker, infoWindow);
+      this.addClickEventToMarker(marker, infoWindow);
     });
   }
-  addClickEvent(
+  addClickEventToMarker(
     marker: google.maps.Marker,
     infoWindow: google.maps.InfoWindow
   ): void {

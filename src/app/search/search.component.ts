@@ -22,10 +22,12 @@ export class SearchComponent implements OnInit {
   category: string;
   categoryDefaultId: number;
   formatedAddress: string;
-  markerDraggingSearchActivated: boolean;
+  searchByDraggingMainMarker: boolean;
+  showMainMarkerCircle: boolean;
 
   @Input() location: GeoLocationInterface;
   @Output() searchPlacesEvent = new EventEmitter();
+  @Output() mainMarkerCircleStatusChange = new EventEmitter<boolean>();
   constructor() {}
 
   ngOnInit(): void {
@@ -34,8 +36,9 @@ export class SearchComponent implements OnInit {
       (item) => item.id == this.categoryDefaultId
     ).name;
     this.radius = this.radiusDefault;
-    this.markerDraggingSearchActivated = false;
+    this.searchByDraggingMainMarker = false;
     this.isAddressManuallyTyped = false;
+    this.showMainMarkerCircle = false;
   }
   ngOnChanges(changes: SimpleChange): void {
     if (changes['location'].currentValue) {
@@ -47,8 +50,13 @@ export class SearchComponent implements OnInit {
       this.formatAddress();
     }
   }
-  toggleSelection(value: boolean): void {
-    this.markerDraggingSearchActivated = value;
+  toggleSearchWithMarkerDraggingSelection(value: boolean): void {
+    this.searchByDraggingMainMarker = value;
+  }
+  toggleShowMarkerCircleSelection(value: boolean): void {
+    console.log(value);
+    this.showMainMarkerCircle = value;
+    this.mainMarkerCircleStatusChange.emit(value);
   }
 
   onKeyAddress($event: Event): void {
