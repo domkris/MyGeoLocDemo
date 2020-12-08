@@ -60,6 +60,11 @@ export class SearchComponent implements OnInit {
       this.formatAddress();
     }
   }
+  searchPlaces(): void {
+    if (this.formatedAddress.length > 0) {
+      this.searchPlacesEvent.emit();
+    }
+  }
   toggleSearchWithMarkerDraggingSelection(value: boolean): void {
     this.searchByDraggingMainMarker = value;
   }

@@ -80,6 +80,7 @@ export class MapComponent implements OnInit {
     if (this.searchComponent.isAddressManuallyTyped) {
       this.getNewLocationFromUsersAddress();
       this.searchComponent.isAddressManuallyTyped = false;
+      this.progressBar.complete();
     } else {
       let location = this.searchComponent.location;
       let category = this.searchComponent.category;
@@ -103,16 +104,19 @@ export class MapComponent implements OnInit {
   getNewLocationFromUsersAddress(): void {
     let address = this.searchComponent.formatedAddress;
     this.apiService.getLatLng(address).subscribe((location: GeoLocation) => {
-      this.location = location;
-      this.searchComponent.location = location;
-      let latLng = new google.maps.LatLng(
-        location.geometry.location.latitude,
-        location.geometry.location.longitude
-      );
-      this.mainMarker.setPosition(latLng);
-      this.map.setCenter(latLng);
-      this.getPlaces();
-      //console.log(location);
+      if (location != null) {
+        this.location = location;
+        this.searchComponent.location = location;
+        let latLng = new google.maps.LatLng(
+          location.geometry.location.latitude,
+          location.geometry.location.longitude
+        );
+        this.mainMarker.setPosition(latLng);
+        this.map.setCenter(latLng);
+        this.getPlaces();
+      } else {
+        alert('Address unknown');
+      }
     });
     //console.log(address);
   }
@@ -158,7 +162,7 @@ export class MapComponent implements OnInit {
   }
   onDraggingMainMarker(event: any): void {
     this.latLnglocation = event.latLng.lat() + ',' + event.latLng.lng();
-    // center the map as well
+    // center the map
     //this.map.setCenter(this.mainMarker.getPosition());
     this.mainMarkerCircle.setCenter(this.mainMarker.getPosition());
     this.removePreviousMarkersFromMap();
@@ -182,7 +186,6 @@ export class MapComponent implements OnInit {
     this.removePreviousMarkersFromMap();
     this.mainMarkerCircle.setCenter(this.mainMarker.getPosition());
     this.places.forEach((place) => {
-      //console.log(place);
       const marker = this.createMarkerForPlace(place);
       const infoWindow = this.createInfoWindow(place);
       this.addClickEventToMarker(marker, infoWindow);
