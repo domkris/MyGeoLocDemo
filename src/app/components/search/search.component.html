@@ -1,17 +1,19 @@
 <div class="searchContainer">
   <form class="example-form">
     <div class="address-search">
-      <mat-form-field class="example-full-width">
+      <mat-form-field class="example-full-width" [style.width.px]="250">
         <mat-label><b>Adresa</b></mat-label>
         <input
           matInput
+          required
           [value]="formatedAddress"
           (keyup)="onKeyAddress($event)"
+          name="address"
         />
       </mat-form-field>
     </div>
     <div class="category-search">
-      <mat-form-field appearance="fill">
+      <mat-form-field [style.width.px]="250">
         <mat-label><b>Odaberite kategoriju</b></mat-label>
         <mat-select
           name="categories"
@@ -26,10 +28,11 @@
       </mat-form-field>
     </div>
     <div class="radius-search">
-      <mat-form-field class="example-full-width">
-        <mat-label><b>Radijus za lokacije u metrima</b></mat-label>
+      <mat-form-field [style.width.px]="110">
+        <mat-label><b>Radijus u metrima</b></mat-label>
         <input
           matInput
+          required
           name="radius"
           id="radius"
           (keyup)="onKeyRadius($event)"

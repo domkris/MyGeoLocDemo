@@ -11,14 +11,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
-import { PlacesComponent } from './places/places.component';
-import { MapComponent } from './map/map.component';
+import { PlacesComponent } from './components/places/places.component';
+import { MapComponent } from './components/map/map.component';
 import { ApiService } from './services/api.service';
 import { FormsModule } from '@angular/forms';
-import { SearchComponent } from './search/search.component';
+import { SearchComponent } from './components/search/search.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [AppComponent, PlacesComponent, MapComponent, SearchComponent],
@@ -38,6 +39,7 @@ import { MatSortModule } from '@angular/material/sort';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
+    MatProgressBarModule,
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],

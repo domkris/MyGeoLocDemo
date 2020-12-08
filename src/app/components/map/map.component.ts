@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {} from 'googlemaps';
-import { ApiService } from '../services/api.service';
-import { PlaceInterface } from '../types/Place/place-interface';
+import { ApiService } from '../../services/api.service';
+import { PlaceInterface } from '../../types/Place/place-interface';
 import { GeoLocationInterface } from 'src/app/types/GeoLocation/geolocation-interface';
 import { SearchComponent } from '../search/search.component';
+import { ThemePalette } from '@angular/material/core';
+import { ProgressBarMode } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-map',
