@@ -4,8 +4,7 @@ import { ApiService } from '../../services/api.service';
 import { PlaceInterface } from '../../types/Place/place-interface';
 import { GeoLocationInterface } from 'src/app/types/GeoLocation/geolocation-interface';
 import { SearchComponent } from '../search/search.component';
-import { ThemePalette } from '@angular/material/core';
-import { ProgressBarMode } from '@angular/material/progress-bar';
+import { NgProgressComponent } from 'ngx-progressbar';
 
 @Component({
   selector: 'app-map',
@@ -22,6 +21,7 @@ export class MapComponent implements OnInit {
   markers: google.maps.Marker[] = [];
   places: PlaceInterface[];
 
+  @ViewChild(NgProgressComponent) progressBar: NgProgressComponent;
   @ViewChild(SearchComponent)
   private searchComponent: SearchComponent;
   constructor(private apiService: ApiService) {}
@@ -75,6 +75,7 @@ export class MapComponent implements OnInit {
     });
   }
   getPlaces(): void {
+    this.progressBar.start();
     this.places = null;
     if (this.searchComponent.isAddressManuallyTyped) {
       this.getNewLocationFromUsersAddress();
@@ -95,6 +96,7 @@ export class MapComponent implements OnInit {
           this.places = places;
           console.log(places);
           this.showPlacesOnMap();
+          this.progressBar.complete();
         });
     }
   }

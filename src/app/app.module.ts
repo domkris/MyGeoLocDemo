@@ -20,6 +20,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { NgProgressModule } from 'ngx-progressbar';
 
 @NgModule({
   declarations: [AppComponent, PlacesComponent, MapComponent, SearchComponent],
@@ -40,6 +41,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatPaginatorModule,
     MatSortModule,
     MatProgressBarModule,
+    NgProgressModule,
   ],
   providers: [ApiService],
   bootstrap: [AppComponent],
