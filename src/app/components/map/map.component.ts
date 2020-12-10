@@ -89,13 +89,10 @@ export class MapComponent implements OnInit {
         location.geometry.location.latitude +
         ',' +
         location.geometry.location.longitude;
-      console.log(this.searchComponent.location);
-      console.log(this.location);
       this.apiService
         .getPlaces(latLng, category, radius)
         .subscribe((places: Place[]) => {
           this.places = places;
-          console.log(places);
           this.showPlacesOnMap();
           this.progressBar.complete();
         });
@@ -118,7 +115,6 @@ export class MapComponent implements OnInit {
         alert('Address unknown');
       }
     });
-    //console.log(address);
   }
 
   getCurrentGeoLocation(): void {
@@ -163,7 +159,7 @@ export class MapComponent implements OnInit {
   onDraggingMainMarker(event: any): void {
     this.latLnglocation = event.latLng.lat() + ',' + event.latLng.lng();
     // center the map
-    //this.map.setCenter(this.mainMarker.getPosition());
+    this.map.setCenter(this.mainMarker.getPosition());
     this.mainMarkerCircle.setCenter(this.mainMarker.getPosition());
     this.removePreviousMarkersFromMap();
     this.getCurrentGeoLocation();

@@ -52,10 +52,6 @@ export class SearchComponent implements OnInit {
   }
   ngOnChanges(changes: SimpleChange): void {
     if (changes['location'].currentValue) {
-      console.log(
-        'ngOnChange SearchComponent Address',
-        changes['location'].currentValue
-      );
       this.location = changes['location'].currentValue;
       this.formatAddress();
     }
