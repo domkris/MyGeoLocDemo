@@ -1,0 +1,63 @@
+:root {
+  --main-radius: 5px;
+  --main-padding: 5px;
+}
+
+.mapContainer {
+  display: grid;
+  height: 100vh;
+  margin: 1%;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-areas:
+    "map map map places places"
+    "map map map places places"
+    "search search search places places";
+  grid-gap: 1.6rem;
+}
+
+.map {
+  grid-area: map;
+  border-radius: var(--main-radius);
+  padding-top: var(--main-padding);
+  font-size: 1.5rem;
+}
+.search {
+  grid-area: search;
+  border-radius: var(--main-radius);
+  padding-top: var(--main-padding);
+  font-size: 1rem;
+}
+.places {
+  grid-area: places;
+  border-radius: var(--main-radius);
+  padding-top: var(--main-padding);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+@media only screen and (max-width: 800px) {
+  .mapContainer {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(300px, 300px) 1.2fr 0.1fr 1fr;
+    grid-template-areas:
+      "map"
+      "search"
+      "places";
+    grid-gap: 0.2rem;
+  }
+
+  .map {
+    font-size: 1rem;
+    height: 100%;
+  }
+  .search {
+    font-size: 0.8rem;
+    height: 100%;
+  }
+  .places {
+    font-size: 0.9rem;
+    height: 100%;
+    background-color: aliceblue;
+  }
+}

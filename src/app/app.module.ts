@@ -12,7 +12,6 @@ import { MatListModule } from '@angular/material/list';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { PlacesComponent } from './components/places/places.component';
-import { MapComponent } from './components/map/map.component';
 import { ApiService } from './services/api.service';
 import { FormsModule } from '@angular/forms';
 import { SearchComponent } from './components/search/search.component';
@@ -21,9 +20,17 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NgProgressModule } from 'ngx-progressbar';
+import { MapContainerComponent } from './components/map-container/map-container.component';
+import { MapComponent } from './components/map/map.component';
 
 @NgModule({
-  declarations: [AppComponent, PlacesComponent, MapComponent, SearchComponent],
+  declarations: [
+    AppComponent,
+    PlacesComponent,
+    SearchComponent,
+    MapContainerComponent,
+    MapComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

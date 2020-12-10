@@ -33,8 +33,8 @@ export class SearchComponent implements OnInit {
   showMainMarkerCircle: boolean;
 
   @Input() location: GeoLocation;
-  @Output() searchPlacesEvent = new EventEmitter();
-  @Output() radiusSizeChangeEvent = new EventEmitter<number>();
+  @Output() getPlaces = new EventEmitter();
+  @Output() radiusSizeChange = new EventEmitter<number>();
   @Output() mainMarkerCircleStatusChange = new EventEmitter<boolean>();
   constructor() {}
 
@@ -58,14 +58,13 @@ export class SearchComponent implements OnInit {
   }
   searchPlaces(): void {
     if (this.formatedAddress.length > 0) {
-      this.searchPlacesEvent.emit();
+      this.getPlaces.emit();
     }
   }
   toggleSearchWithMarkerDraggingSelection(value: boolean): void {
     this.searchByDraggingMainMarker = value;
   }
   toggleShowMarkerCircleSelection(value: boolean): void {
-    console.log(value);
     this.showMainMarkerCircle = value;
     this.mainMarkerCircleStatusChange.emit(value);
   }
@@ -74,14 +73,14 @@ export class SearchComponent implements OnInit {
     this.formatedAddress = ($event.target as HTMLInputElement).value;
     this.isAddressManuallyTyped = true;
   }
-  onValueSelected(id: number): void {
+  onCategorySelected(id: number): void {
     this.category = categories.find((item) => item.id == id).name;
   }
 
   onKeyRadius($event: Event): void {
     this.radius = parseInt(($event.target as HTMLInputElement).value);
     if (!Number.isNaN(this.radius)) {
-      this.radiusSizeChangeEvent.emit(this.radius);
+      this.radiusSizeChange.emit(this.radius);
     }
   }
   formatAddress(): void {

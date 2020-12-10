@@ -1,0 +1,19 @@
+<ng-progress #progressBar [thick]="true"></ng-progress>
+<div class="mapContainer">
+  <div class="map">
+    <app-map (getCurrentGeoLocation)="getCurrentGeoLocation($event)"></app-map>
+  </div>
+  <div class="search">
+    <app-search
+      [location]="location"
+      (getPlaces)="getPlaces()"
+      (mainMarkerCircleStatusChange)="showCircleRadius($event)"
+      (radiusSizeChange)="radiusSizeChange($event)"
+    ></app-search>
+  </div>
+  <div class="places">
+    <div *ngIf="places">
+      <app-places [places]="places"></app-places>
+    </div>
+  </div>
+</div>

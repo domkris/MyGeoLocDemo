@@ -20,7 +20,7 @@
           name="categories"
           id="categories"
           [(ngModel)]="categoryDefaultId"
-          (ngModelChange)="onValueSelected($event)"
+          (ngModelChange)="onCategorySelected($event)"
         >
           <mat-option [value]="category.id" *ngFor="let category of categories">
             {{ category.name }}
