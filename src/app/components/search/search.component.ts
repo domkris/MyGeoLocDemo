@@ -6,14 +6,11 @@ import {
   Output,
   SimpleChange,
 } from '@angular/core';
-import { categories } from 'src/app/constants/categories';
 import {
-  FormControl,
-  FormGroupDirective,
-  NgForm,
-  Validators,
-} from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
+  categories,
+  radiusDefault,
+  categoryDefault,
+} from 'src/app/constants/constants';
 import { GeoLocation } from 'src/app/types/GeoLocation/geolocation-interface';
 
 @Component({
@@ -22,15 +19,14 @@ import { GeoLocation } from 'src/app/types/GeoLocation/geolocation-interface';
   styleUrls: ['./search.component.css'],
 })
 export class SearchComponent implements OnInit {
-  isAddressManuallyTyped: boolean;
   categories = categories;
-  radius: number;
-  radiusDefault: number = 1000;
-  category: string;
-  categoryDefaultId: number;
+  radius: number = radiusDefault;
+  categoryDefault: number = categoryDefault.id;
+  category: string = categoryDefault.name;
   formatedAddress: string;
-  searchByDraggingMainMarker: boolean;
-  showMainMarkerCircle: boolean;
+  isAddressManuallyTyped: boolean = false;
+  searchByDraggingMainMarker: boolean = false;
+  showMainMarkerCircle: boolean = false;
 
   @Input() location: GeoLocation;
   @Output() getPlaces = new EventEmitter();
@@ -38,18 +34,7 @@ export class SearchComponent implements OnInit {
   @Output() mainMarkerCircleStatusChange = new EventEmitter<boolean>();
   constructor() {}
 
-  ngOnInit(): void {
-    this.categoryDefaultId = categories.find(
-      (category) => category.name == 'restaurant'
-    ).id;
-    this.category = categories.find(
-      (category) => category.id == this.categoryDefaultId
-    ).name;
-    this.radius = this.radiusDefault;
-    this.searchByDraggingMainMarker = false;
-    this.isAddressManuallyTyped = false;
-    this.showMainMarkerCircle = false;
-  }
+  ngOnInit(): void {}
   ngOnChanges(changes: SimpleChange): void {
     if (changes['location'].currentValue) {
       this.location = changes['location'].currentValue;
@@ -59,6 +44,8 @@ export class SearchComponent implements OnInit {
   searchPlaces(): void {
     if (this.formatedAddress.length > 0) {
       this.getPlaces.emit();
+    } else {
+      alert('Address is empty');
     }
   }
   toggleSearchWithMarkerDraggingSelection(value: boolean): void {
@@ -79,6 +66,14 @@ export class SearchComponent implements OnInit {
 
   onKeyRadius($event: Event): void {
     this.radius = parseInt(($event.target as HTMLInputElement).value);
+    if (this.radius < 0) {
+      alert('Raidus cannot be negative!');
+      this.radius = 0;
+    }
+    if (this.radius > 50000) {
+      alert('Raidus cannot be bigger then 50000');
+      this.radius = 50000;
+    }
     if (!Number.isNaN(this.radius)) {
       this.radiusSizeChange.emit(this.radius);
     }

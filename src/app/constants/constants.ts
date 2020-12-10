@@ -1,3 +1,9 @@
+export const radiusDefault = 1000;
+export const zoomDefault = 15;
+export const categoryDefault = {
+  id: 74,
+  name: 'restaurant',
+};
 export const categories: any[] = [
   { id: 0, name: 'accounting' },
   { id: 1, name: 'airport' },

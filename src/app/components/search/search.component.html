@@ -19,7 +19,7 @@
         <mat-select
           name="categories"
           id="categories"
-          [(ngModel)]="categoryDefaultId"
+          [(ngModel)]="categoryDefault"
           (ngModelChange)="onCategorySelected($event)"
         >
           <mat-option [value]="category.id" *ngFor="let category of categories">
@@ -35,6 +35,8 @@
           matInput
           type="number"
           required
+          min="0"
+          max="50000"
           name="radius"
           id="radius"
           (keyup)="onKeyRadius($event)"

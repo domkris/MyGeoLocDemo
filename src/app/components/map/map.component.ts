@@ -65,7 +65,7 @@ export class MapComponent implements OnInit {
       strokeWeight: 1,
       fillColor: '#FF0000',
       fillOpacity: 0.08,
-      map: this.map,
+      map: null,
       center: null,
       radius: null,
     });
@@ -208,5 +208,47 @@ export class MapComponent implements OnInit {
     this.mainMarkerCircle.setMap(null);
     this.mainMarkerCircle.setRadius(null);
     this.mainMarkerCircle.setCenter(null);
+  }
+
+  changeMapZoom(radius: number) {
+    if (radius < 15) {
+      this.map.setZoom(21);
+    }
+    if (radius >= 15) {
+      this.map.setZoom(20);
+    }
+    if (radius > 30) {
+      this.map.setZoom(19);
+    }
+    if (radius > 70) {
+      this.map.setZoom(18);
+    }
+    if (radius > 130) {
+      this.map.setZoom(17);
+    }
+    if (radius > 270) {
+      this.map.setZoom(16);
+    }
+    if (radius > 500) {
+      this.map.setZoom(15);
+    }
+    if (radius > 1000) {
+      this.map.setZoom(14);
+    }
+    if (radius > 2000) {
+      this.map.setZoom(13);
+    }
+    if (radius > 4200) {
+      this.map.setZoom(12);
+    }
+    if (radius > 8000) {
+      this.map.setZoom(11);
+    }
+    if (radius > 16000) {
+      this.map.setZoom(10);
+    }
+    if (radius > 32000 && radius <= 50000) {
+      this.map.setZoom(9);
+    }
   }
 }

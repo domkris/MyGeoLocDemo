@@ -43,39 +43,57 @@ export class MapContainerComponent implements OnInit {
         location.geometry.location.latitude +
         ',' +
         location.geometry.location.longitude;
-      this.apiService
-        .getPlaces(latLng, category, radius)
-        .subscribe((places: Place[]) => {
+      this.apiService.getPlaces(latLng, category, radius).subscribe(
+        (places: Place[]) => {
           this.places = places;
           this.showPlacesOnMap();
+          this.changeMapZoom(radius);
           this.progressBar.complete();
-        });
+        },
+        (error) => {
+          alert(error.message);
+        }
+      );
     }
+  }
+  changeMapZoom(radius: number) {
+    this.mapComponent.changeMapZoom(radius);
   }
   getNewAddress(): void {
     let address = this.searchComponent.formatedAddress;
-    this.apiService.getLatLng(address).subscribe((location: GeoLocation) => {
-      if (location != null) {
-        this.location = location;
-        let latLng = new google.maps.LatLng(
-          location.geometry.location.latitude,
-          location.geometry.location.longitude
-        );
-        this.mapComponent.changeMainMarkerPosition(latLng);
-        this.getPlaces();
-      } else {
-        alert('Address unknown');
+    this.apiService.getLatLng(address).subscribe(
+      (location: GeoLocation) => {
+        if (location != null) {
+          this.location = location;
+          let latLng = new google.maps.LatLng(
+            location.geometry.location.latitude,
+            location.geometry.location.longitude
+          );
+          this.mapComponent.changeMainMarkerPosition(latLng);
+          this.getPlaces();
+        } else {
+          alert('Address unknown');
+          this.searchComponent.formatedAddress = null;
+        }
+      },
+      (error) => {
+        alert(error.message);
       }
-    });
+    );
   }
 
   getCurrentGeoLocation(latLng: string): void {
-    this.apiService.getAddress(latLng).subscribe((location: GeoLocation) => {
-      this.location = location;
-      if (this.searchComponent.searchByDraggingMainMarker) {
-        this.getPlaces();
+    this.apiService.getAddress(latLng).subscribe(
+      (location: GeoLocation) => {
+        this.location = location;
+        if (this.searchComponent.searchByDraggingMainMarker) {
+          this.getPlaces();
+        }
+      },
+      (error) => {
+        alert(error.message);
       }
-    });
+    );
   }
 
   radiusSizeChange(value: number): void {
