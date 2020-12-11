@@ -9,13 +9,13 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   getAddress(latlng: string): Observable<GeoLocation> {
-    let url = new URL('https://localhost:44311/address/search/');
+    let url = new URL('https://localhost:44311/address/');
     url.searchParams.append('latlng', latlng);
     return this.http.get<GeoLocation>(url.toString());
   }
 
   getLatLng(address: string): Observable<GeoLocation> {
-    let url = new URL('https://localhost:44311/latlng/search/');
+    let url = new URL('https://localhost:44311/latlng/');
     url.searchParams.append('address', address);
     return this.http.get<GeoLocation>(url.toString());
   }
@@ -24,7 +24,7 @@ export class ApiService {
     type: string,
     radius: number
   ): Observable<Place[]> {
-    let url = new URL('https://localhost:44311/places/search/');
+    let url = new URL('https://localhost:44311/places/');
     url.searchParams.append('location', location);
     url.searchParams.append('type', type);
     url.searchParams.append('radius', radius.toString());

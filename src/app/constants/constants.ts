@@ -1,3 +1,4 @@
+export const apiKey = 'AIzaSyCuyfl0Mrz1GNYIdHKfL6u_3jNSQIvyOng';
 export const radiusDefault = 1000;
 export const zoomDefault = 15;
 export const categoryDefault = {

@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {} from 'googlemaps';
 import { GeoLocation } from 'src/app/types/GeoLocation/geolocation-interface';
 import { Place } from 'src/app/types/Place/place-interface';
+import { loader } from 'src/app/constants/loader';
 
 @Component({
   selector: 'app-map',
@@ -33,18 +34,20 @@ export class MapComponent implements OnInit {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
-          this.map = new google.maps.Map(document.getElementById('map'), {
-            center: {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            },
-            zoom: 15,
+          loader.load().then(() => {
+            this.map = new google.maps.Map(document.getElementById('map'), {
+              center: {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              },
+              zoom: 15,
+            });
+            this.showMainMarker(pos);
+            this.createMainMarkerCircle();
+            this.latLnglocation =
+              position.coords.latitude + ',' + position.coords.longitude;
+            this.getGeoLocation();
           });
-          this.showMainMarker(pos);
-          this.createMainMarkerCircle();
-          this.latLnglocation =
-            position.coords.latitude + ',' + position.coords.longitude;
-          this.getGeoLocation();
         },
         () => {
           this.handleLocationError(true, this.map.getCenter());
@@ -210,7 +213,9 @@ export class MapComponent implements OnInit {
     this.mainMarkerCircle.setCenter(null);
   }
 
-  changeMapZoom(radius: number) {
+  fitCircleInMap(radius: number) {
+    this.map.fitBounds(this.mainMarkerCircle.getBounds());
+    /*
     if (radius < 15) {
       this.map.setZoom(21);
     }
@@ -250,5 +255,6 @@ export class MapComponent implements OnInit {
     if (radius > 32000 && radius <= 50000) {
       this.map.setZoom(9);
     }
+    */
   }
 }

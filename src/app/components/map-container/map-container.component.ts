@@ -57,7 +57,7 @@ export class MapContainerComponent implements OnInit {
     }
   }
   changeMapZoom(radius: number) {
-    this.mapComponent.changeMapZoom(radius);
+    this.mapComponent.fitCircleInMap(radius);
   }
   getNewAddress(): void {
     let address = this.searchComponent.formatedAddress;

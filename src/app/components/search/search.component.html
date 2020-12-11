@@ -2,7 +2,7 @@
   <form class="example-form">
     <div class="address-search">
       <mat-form-field class="example-full-width" [style.width.px]="250">
-        <mat-label><b>Adresa</b></mat-label>
+        <mat-label><b>Address</b></mat-label>
         <input
           matInput
           required
@@ -15,7 +15,7 @@
     </div>
     <div class="category-search">
       <mat-form-field [style.width.px]="250">
-        <mat-label><b>Odaberite kategoriju</b></mat-label>
+        <mat-label><b>Category</b></mat-label>
         <mat-select
           name="categories"
           id="categories"
@@ -30,7 +30,7 @@
     </div>
     <div class="radius-search">
       <mat-form-field [style.width.px]="110">
-        <mat-label><b>Radijus u metrima</b></mat-label>
+        <mat-label><b>Radius (meters)</b></mat-label>
         <input
           matInput
           type="number"
@@ -51,18 +51,18 @@
         (click)="
           toggleSearchWithMarkerDraggingSelection(!checkboxMarker.checked)
         "
-        ><label for="checkbox">Pretraga pomicanjem markera</label></mat-checkbox
+        ><label for="checkbox">Search by dragging marker</label></mat-checkbox
       >
       <mat-checkbox
         #checkboxCircle
         class="example-margin"
         (click)="toggleShowMarkerCircleSelection(!checkboxCircle.checked)"
-        ><label for="checkbox">Prikaži radijus</label></mat-checkbox
+        ><label for="checkbox">Show radius</label></mat-checkbox
       >
     </div>
     <div class="search-button">
       <button mat-raised-button color="primary" (click)="searchPlaces()">
-        Pretraga
+        Search
       </button>
     </div>
   </form>
